@@ -11,7 +11,6 @@ import lombok.*;
 @Builder
 @Entity
 @AllArgsConstructor
-@RequiredArgsConstructor
 @NoArgsConstructor
 public class BioData {
     @Id
