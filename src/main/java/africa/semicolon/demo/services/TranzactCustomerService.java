@@ -58,7 +58,7 @@ public class TranzactCustomerService implements CustomerService{
     public CustomerResponse getCustomerById(Long id) throws UserNotFoundException {
       var foundCustomer=  customerRepository.findById(id).orElseThrow(()->new UserNotFoundException(String.format(USER_WITH_ID_NOT_FOUND, id)));
       var customerResponse =buildCustomerResponse(foundCustomer);
-      log.info("registration successful{}", customerResponse);
+//      log.info("registration successful{}", customerResponse);
         return customerResponse;
     }
 
