@@ -9,6 +9,7 @@ import africa.semicolon.demo.exceptions.TransactionRegistrationFailedException;
 import africa.semicolon.demo.exceptions.UserNotFoundException;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 

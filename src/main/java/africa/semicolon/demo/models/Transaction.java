@@ -21,7 +21,7 @@ public class Transaction {
         private Long id;
         private Long buyerId;
         private Long sellerId;
-        @OneToOne(cascade = CascadeType.ALL)
+        @OneToOne(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
         private Payment payment;
         private String description;
         @JsonSerialize(using = LocalDateTimeSerializer.class)
@@ -30,6 +30,7 @@ public class Transaction {
         @JsonSerialize(using = LocalDateTimeSerializer.class)
         @JsonDeserialize(using = LocalDateTimeDeserializer.class)
         private LocalDateTime lastModifiedAt;
+        private Status status;
 
         @PrePersist
         public void setTimeCreatedAt(){

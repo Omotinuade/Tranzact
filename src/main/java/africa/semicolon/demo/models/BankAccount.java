@@ -15,5 +15,4 @@ public class BankAccount {
     private String accountNumber;
     private String accountName;
     private String bankName;
-
 }

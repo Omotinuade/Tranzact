@@ -1,4 +1,4 @@
-package africa.semicolon.demo;
+package africa.semicolon.demo.services;
 
 import africa.semicolon.demo.dtos.request.CustomerRegistrationRequest;
 import africa.semicolon.demo.dtos.request.TransactionRegisterRequest;

@@ -7,9 +7,11 @@ import africa.semicolon.demo.dtos.response.CustomerResponse;
 import africa.semicolon.demo.exceptions.CustomerRegistrationFailedException;
 import africa.semicolon.demo.exceptions.ProfileUpdateFailedException;
 import africa.semicolon.demo.exceptions.UserNotFoundException;
+import africa.semicolon.demo.models.BankAccount;
 import africa.semicolon.demo.models.BioData;
 import africa.semicolon.demo.models.Customer;
 import africa.semicolon.demo.repository.CustomerRepository;
+import africa.semicolon.demo.services.cloud.CloudinaryService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
@@ -19,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import java.time.LocalDateTime;
@@ -40,12 +43,14 @@ public class TranzactCustomerService implements CustomerService{
 //        this.customerRepository = customerRepository;
 //    }
 
-    private ModelMapper modelMapper = new ModelMapper();
+    private ModelMapper modelMapper;
+    private CloudinaryService cloudService;
     @Override
     public CustomerRegistrationResponse registerCustomer(CustomerRegistrationRequest customerRegistrationRequest) throws CustomerRegistrationFailedException {
        BioData biodata=modelMapper.map(customerRegistrationRequest, BioData.class);
        Customer customer=new Customer();
        customer.setBioData(biodata);
+       customer.setBankAccount(new BankAccount());
         Customer savedCustomer = customerRepository.save(customer);
         boolean isSaved = savedCustomer.getId() != null;
 
@@ -80,18 +85,19 @@ public class TranzactCustomerService implements CustomerService{
     }
 
     @Override
-    public ApiResponse updateCustomerDetail(Long id, JsonPatch updateForm) throws UserNotFoundException, ProfileUpdateFailedException {
+    public ApiResponse updateCustomerDetail(Long id, JsonPatch updateForm, MultipartFile image) throws UserNotFoundException, ProfileUpdateFailedException {
         ObjectMapper mapper = new ObjectMapper();
         var customer = customerRepository.findById(id).orElseThrow(()->new UserNotFoundException(String.format(USER_WITH_ID_NOT_FOUND, id)));
        JsonNode customerNode = mapper.convertValue(customer, JsonNode.class);
 
-        ;
         try {
            JsonNode updatedNode = updateForm.apply(customerNode);
             Customer updatedCustomer = mapper.convertValue(updatedNode,Customer.class);
+            String url=cloudService.upload(image.getBytes());
+            updatedCustomer.setProfileImage(url);
             updatedCustomer.setLastModifiedAt(LocalDateTime.now());
             customerRepository.save(updatedCustomer);
-        } catch (JsonPatchException e) {
+        } catch (Exception e) {
             throw new ProfileUpdateFailedException(e.getMessage());
         }
         return ApiResponse.builder()

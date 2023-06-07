@@ -1,4 +1,4 @@
-package africa.semicolon.demo;
+package africa.semicolon.demo.services;
 
 import africa.semicolon.demo.dtos.request.CustomerRegistrationRequest;
 import africa.semicolon.demo.dtos.response.CustomerRegistrationResponse;
@@ -20,8 +20,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import static java.math.BigInteger.*;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 import static africa.semicolon.demo.utils.AppUtils.FOUR;
@@ -75,12 +81,13 @@ public class TranzactCustomerServiceTest {
    }
 
    @Test
-    public void updateCustomerDetailsTest() throws UserNotFoundException, JsonPatchException, ProfileUpdateFailedException {
+    public void updateCustomerDetailsTest() throws Exception {
         JsonPatch updateForm = buildJsonPatch();
+       MultipartFile image = new MockMultipartFile("download",new FileInputStream("C:\\Users\\Tinuade\\Desktop\\demo\\src\\test\\resources\\images\\download.jpeg"));
        var foundCustomer= customerService.getCustomerById(customerRegistrationResponse.getId());
        log.info(foundCustomer.toString());
        assertThat(foundCustomer.getName().contains("Spicy") && foundCustomer.getName().contains("Sandy  ")).isFalse();
-       customerService.updateCustomerDetail(foundCustomer.getId(),updateForm);
+       customerService.updateCustomerDetail(foundCustomer.getId(),updateForm, image);
        var updatedCustomer= customerService.getCustomerById(customerRegistrationResponse.getId());
        log.info(updatedCustomer.toString());
        assertThat(updatedCustomer.getName().contains("Spicy") && updatedCustomer.getName().contains("Sandy")).isTrue();
@@ -96,6 +103,18 @@ public class TranzactCustomerServiceTest {
                     new ReplaceOperation(
                             new JsonPointer("/lastname"),
                             new TextNode("Sandy")
+                    ),
+                    new ReplaceOperation(
+                            new JsonPointer("/bankAccount/accountName"),
+                            new TextNode("Folahan Joshua")
+                    ),
+                    new ReplaceOperation(
+                            new JsonPointer("/bankAccount/accountNumber"),
+                            new TextNode("0123456789")
+                    ),
+                    new ReplaceOperation(
+                            new JsonPointer("/bankAccount/bankName"),
+                            new TextNode("Prof-Pay")
                     )
             );
             return new JsonPatch(patch);

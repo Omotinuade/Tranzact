@@ -9,6 +9,7 @@ import africa.semicolon.demo.exceptions.ProfileUpdateFailedException;
 import africa.semicolon.demo.exceptions.UserNotFoundException;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,6 +22,6 @@ public interface CustomerService {
 
     void deleteCustomerById(Long id);
 
-    ApiResponse updateCustomerDetail(Long id, JsonPatch updateForm) throws UserNotFoundException, JsonPatchException, ProfileUpdateFailedException;
+    ApiResponse updateCustomerDetail(Long id, JsonPatch updateForm, MultipartFile image) throws UserNotFoundException, JsonPatchException, ProfileUpdateFailedException;
 }
 
