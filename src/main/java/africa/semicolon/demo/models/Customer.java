@@ -18,7 +18,7 @@ public class Customer {
     private BioData bioData;
     private String firstname;
     private String lastname;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
     private BankAccount bankAccount;
     private String profileImage;
     @JsonSerialize(using = LocalDateTimeSerializer.class)

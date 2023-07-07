@@ -44,7 +44,7 @@ public class TranzactCustomerServiceTest {
     void setUp() throws CustomerRegistrationFailedException {
         customerRegistrationRequest=new CustomerRegistrationRequest();
         customerRegistrationRequest.setEmail("tinubu@gmail.com");
-        customerRegistrationRequest.setPassword("");
+        customerRegistrationRequest.setPassword("123");
         customerRegistrationResponse
                 =customerService.registerCustomer(customerRegistrationRequest);
     }

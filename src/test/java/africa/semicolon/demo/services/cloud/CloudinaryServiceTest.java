@@ -20,8 +20,9 @@ public class CloudinaryServiceTest {
     @Test
     public void uploadTest() {
         try {
-            MultipartFile imageFile = new MockMultipartFile("download", new FileInputStream("C:\\Users\\Tinuade\\Desktop\\demo\\src\\test\\resources\\images\\download.jpeg"));
+            MultipartFile imageFile = new MockMultipartFile("dog", new FileInputStream("C:\\Users\\Tinuade\\Desktop\\demo\\src\\test\\resources\\images\\dog.jpeg"));
             String cloudUrl=   cloudinaryService.upload(imageFile.getBytes());
+            log.info(cloudUrl);
             assertThat(cloudUrl).isNotNull();
         } catch (Exception e) {
             e.printStackTrace();
